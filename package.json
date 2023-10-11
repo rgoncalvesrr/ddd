@@ -21,10 +21,12 @@
   },
   "dependencies": {
     "@types/sequelize": "^4.28.16",
+    "@types/sqlite3": "^3.1.9",
     "@types/uuid": "^9.0.5",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.33.0",
     "sequelize-typescript": "^2.1.5",
+    "sqlite3": "^5.1.6",
     "uuid": "^9.0.1"
   }
 }
