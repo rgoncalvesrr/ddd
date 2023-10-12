@@ -4,7 +4,6 @@ import { IEventHandler } from './event-handler.interface';
 import { ProductCreatedEvent } from '../../product/event/product-created.event';
 import { SendEmailWhenProductIsCreateHandler } from '../../product/event/handler/send-email-when-product-is-created.handler';
 import { v4 as uuid } from 'uuid';
-import { domainToASCII } from 'url';
 
 describe("Domain Event unit tests", () => {
     let eventDispatcher: IEventDispatcher;
