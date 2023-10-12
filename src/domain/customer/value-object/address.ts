@@ -26,4 +26,8 @@ export class Address {
     get zip(): string {
         return this._zip;
     }
+
+    toString(): string {
+        return `Endereço: ${this._street}, ${this._number}. ${this._city}. CEP: ${this._zip}`;
+    }
 }
