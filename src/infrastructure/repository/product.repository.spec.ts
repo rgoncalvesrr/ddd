@@ -3,9 +3,12 @@ import { ProductModel } from "../db/sequelize/model/product.model";
 import { Product } from "../../domain/entity/product";
 import { v4 as uuid } from "uuid";
 import { ProductRepository } from "./product.repository";
+import { IProductRepository } from "../../domain/repository/product.repository.interface";
 
 describe("Product Repository unit tests", () => {
     let sequelize: Sequelize;
+    let productRepository: IProductRepository;
+    let product1: Product;
 
     beforeEach(async () => {
         sequelize = new Sequelize({
@@ -17,6 +20,9 @@ describe("Product Repository unit tests", () => {
 
         sequelize.addModels([ProductModel]);
         await sequelize.sync();
+
+        productRepository = new ProductRepository();
+        product1 = new Product(uuid(), "Product1", 10);
     });
 
     afterEach(async () => {
@@ -24,39 +30,33 @@ describe("Product Repository unit tests", () => {
     });
 
     it("Should create a product", async () => {
-        const productRepository = new ProductRepository();
-        const product = new Product(uuid(), "Product1", 10);
+        await productRepository.create(product1);
 
-        await productRepository.create(product);
+        const productModel = await ProductModel.findOne({ where: { id: product1.id } });
 
-        const productModel = await ProductModel.findOne({ where: { id: product.id } });
-
-        expect(productModel.toJSON()).toStrictEqual({ id: product.id, name: product.name, price: product.price });
+        expect(productModel.toJSON()).toStrictEqual({ id: product1.id, name: product1.name, price: product1.price });
     });
 
     it("Should update a product", async () => {
-        const productRepository = new ProductRepository();
-        const product = new Product(uuid(), "Product1", 10);
+        await productRepository.create(product1);
 
-        await productRepository.create(product);
-
-        let productModel = await ProductModel.findOne({ where: { id: product.id } });
+        let productModel = await ProductModel.findOne({ where: { id: product1.id } });
 
         expect(productModel.toJSON()).toStrictEqual({
-            id: product.id,
+            id: product1.id,
             name: "Product1",
             price: 10
         });
 
-        product.changeName("Product Changed");
-        product.changePrice(200);
+        product1.changeName("Product Changed");
+        product1.changePrice(200);
 
-        await productRepository.update(product);
+        await productRepository.update(product1);
 
-        productModel = await ProductModel.findOne({ where: { id: product.id } });
+        productModel = await ProductModel.findOne({ where: { id: product1.id } });
 
         expect(productModel.toJSON()).toStrictEqual({
-            id: product.id,
+            id: product1.id,
             name: "Product Changed",
             price: 200
         });
@@ -64,14 +64,10 @@ describe("Product Repository unit tests", () => {
     });
 
     it("Should find a product", async () => {
-        const productRepository = new ProductRepository();
+        await productRepository.create(product1);
 
-        const product = new Product(uuid(), "Product 1", 10);
-
-        await productRepository.create(product);
-
-        const productModel = await ProductModel.findOne({ where: { id: product.id } });
-        const actualProduct = await productRepository.find(product.id);
+        const productModel = await ProductModel.findOne({ where: { id: product1.id } });
+        const actualProduct = await productRepository.find(product1.id);
 
         expect(productModel.toJSON()).toStrictEqual({
             id: actualProduct.id,
@@ -81,16 +77,13 @@ describe("Product Repository unit tests", () => {
     });
 
     it("Should find all products", async () => {
-        const productRepository = new ProductRepository();
+        const product2 = new Product(uuid(), "Product 2", 20);
 
-        const p1 = new Product(uuid(), "Product 1", 10);
-        const p2 = new Product(uuid(), "Product 2", 20);
-
-        await productRepository.create(p1);
-        await productRepository.create(p2);
+        await productRepository.create(product1);
+        await productRepository.create(product2);
 
         const foundProducts = await productRepository.findAll();
-        const products = [p1, p2];
+        const products = [product1, product2];
 
         expect(products).toEqual(foundProducts);
     });
