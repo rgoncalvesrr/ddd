@@ -43,6 +43,10 @@ export class Customer {
         this.validate();
     }
 
+    changeAddress(address: Address) {
+        this._address = address;
+    }
+
     get id(): string {
         return this._id;
     }
@@ -53,10 +57,6 @@ export class Customer {
 
     get address(): Address | undefined {
         return this._address;
-    }
-
-    set address(address: Address) {
-        this._address = address;
     }
 
     get isActive(): boolean {

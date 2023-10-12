@@ -29,7 +29,7 @@ describe("Customer unit tests", () => {
     it("should activate customer", () => {
 
         const customer = new Customer("123", "Conceitho Tecnologia");
-        customer.address = new Address("Rua Coroados", 315, "09195410", "Santo André");
+        customer.changeAddress(new Address("Rua Coroados", 315, "09195410", "Santo André"));
         customer.activate();
 
         expect(customer.isActive).toBe(true);
