@@ -1,3 +1,3 @@
 import { EventBase } from "../../@shared/event/event-base";
 
-export class ProductCreatedEvent extends EventBase { }
+export class CustomerCreatedEvent extends EventBase { }

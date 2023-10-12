@@ -4,7 +4,11 @@ import { IEventHandler } from './event-handler.interface';
 
 export class EventDispatcher implements IEventDispatcher {
 
-    private _eventHandlers: { [eventName: string]: IEventHandler[] } = {};
+    private _eventHandlers: { [eventName: string]: IEventHandler[] };
+
+    constructor(events: { [eventName: string]: IEventHandler[] } = {}) {
+        this._eventHandlers = events;
+    }
 
     notify(event: IEvent): void {
         if (this._eventHandlers[event.constructor.name]) {
